@@ -48,20 +48,32 @@ module.exports = require("tslib");
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
+var AppController_1;
 var _a;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.AppController = void 0;
 const tslib_1 = __webpack_require__(4);
 const common_1 = __webpack_require__(1);
 const app_service_1 = __webpack_require__(6);
-let AppController = class AppController {
+let AppController = AppController_1 = class AppController {
     constructor(appService) {
         this.appService = appService;
+        this._log = new common_1.Logger(AppController_1.name);
+    }
+    wakeUpServer() {
+        const res = this.appService.wakeUpServer();
+        return res;
     }
     checkWord(word) {
         return this.appService.checkWord(word);
     }
 };
+tslib_1.__decorate([
+    (0, common_1.Get)('wake-up'),
+    tslib_1.__metadata("design:type", Function),
+    tslib_1.__metadata("design:paramtypes", []),
+    tslib_1.__metadata("design:returntype", void 0)
+], AppController.prototype, "wakeUpServer", null);
 tslib_1.__decorate([
     (0, common_1.Get)(':word'),
     tslib_1.__param(0, (0, common_1.Param)('word')),
@@ -69,7 +81,7 @@ tslib_1.__decorate([
     tslib_1.__metadata("design:paramtypes", [String]),
     tslib_1.__metadata("design:returntype", void 0)
 ], AppController.prototype, "checkWord", null);
-AppController = tslib_1.__decorate([
+AppController = AppController_1 = tslib_1.__decorate([
     (0, common_1.Controller)(),
     tslib_1.__metadata("design:paramtypes", [typeof (_a = typeof app_service_1.AppService !== "undefined" && app_service_1.AppService) === "function" ? _a : Object])
 ], AppController);
@@ -97,7 +109,10 @@ let AppService = AppService_1 = class AppService {
     }
     async checkWord(word) {
         const dwdsData = (await (0, rxjs_1.lastValueFrom)(this.httpService.get(this.dwdsUrl, { params: { q: word } }))).data;
-        return dwdsData.length > 0;
+        return { wordExists: dwdsData.length > 0 };
+    }
+    wakeUpServer() {
+        return { awake: true };
     }
 };
 AppService = AppService_1 = tslib_1.__decorate([
